@@ -2,27 +2,27 @@ import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ABI } from "./ABI";
 
 // Replace with your contract ABI and address
-const contractABI = [
-  /* Paste your contract ABI here */
-];
-const contractAddress = "0xYourContractAddress";
+const contractAddress = "0xe6F2f5f35752adc98FD0C1eB1b82DD09fC3F47A2";
+
 
 function App() {
+  const contractABI = ABI
+  const [balance, setBalance] = useState(0);
+  const [amount, setAmount] = useState("");
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [contract, setContract] = useState(null);
-  const [balance, setBalance] = useState(0);
-  const [amount, setAmount] = useState("");
 
   // Connect to MetaMask
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
         await window.ethereum.request({ method: "eth_requestAccounts" });
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
         const contract = new ethers.Contract(
           contractAddress,
           contractABI,
@@ -56,27 +56,29 @@ function App() {
   };
 
   // Deposit
-  const deposit = async () => {
-    if (contract && amount) {
-      try {
-        const tx = await contract.deposit(ethers.utils.parseEther(amount));
-        await tx.wait();
-        toast.success(`Deposited ${amount} ETH!`);
-        setAmount("");
-        getBalance(); // Refresh balance
-      } catch (error) {
-        toast.error(`Error: ${error.message}`);
-      }
-    } else {
-      toast.error("Please enter an amount!");
-    }
-  };
+ const deposit = async () => {
+   if (contract && amount) {
+     try {
+       const tx = await contract.deposit({
+         value: ethers.parseEther(amount.toString()), // Ensure amount is a string or number
+       });
+       await tx.wait();
+       toast.success(`Deposited ${amount} ETH!`);
+       setAmount("");
+       getBalance(); // Refresh balance
+     } catch (error) {
+       toast.error(`Error: ${error.message}`);
+     }
+   } else {
+     toast.error("Please enter an amount!");
+   }
+ };
 
   // Withdraw
   const withdraw = async () => {
     if (contract && amount) {
       try {
-        const tx = await contract.withdraw(ethers.utils.parseEther(amount));
+        const tx = await contract.withdraw(ethers.parseEther(amount));
         await tx.wait();
         toast.success(`Withdrew ${amount} ETH!`);
         setAmount("");

@@ -1,8 +1,5 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Deployed Contract
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Network: Base Sepolia Testnet
+- Contract Address: `0xe6F2f5f35752adc98FD0C1eB1b82DD09fC3F47A2` ([View on BaseScan](https://sepolia.basescan.org/address/0xe6F2f5f35752adc98FD0C1eB1b82DD09fC3F47A2))
